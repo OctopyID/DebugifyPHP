@@ -1,0 +1,9 @@
+# IDE
+.idea
+
+# PROJECT
+vendor
+
+.env
+.DS_Store
+.phpunit.cache
