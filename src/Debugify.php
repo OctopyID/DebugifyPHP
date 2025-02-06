@@ -132,10 +132,7 @@ class Debugify
         $type = gettype($arg);
 
         if ($type === 'object' || $type === 'array') {
-            return
-                new SymfonyPayload(new PrimitiveType(
-                    $arg,
-                ));
+            return new SymfonyPayload($arg);
         }
 
         return new UnknownPayload($arg);

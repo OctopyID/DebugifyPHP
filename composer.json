@@ -1,6 +1,6 @@
 {
     "name": "octopyid/debugify",
-    "description": "Login as a different user quickly",
+    "description": "Your Debug Companion",
     "type": "library",
     "license": "MIT",
     "authors": [

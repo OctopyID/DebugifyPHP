@@ -2,7 +2,11 @@
 
 namespace Octopy\Debugify\Http\Payloads;
 
+use DOMDocument;
+use DOMXPath;
 use Octopy\Debugify\Support\PrimitiveType;
+use Symfony\Component\VarDumper\Cloner\VarCloner;
+use Symfony\Component\VarDumper\Dumper\HtmlDumper;
 
 /**
  * symfony/var-dumper
@@ -25,7 +29,33 @@ class SymfonyPayload extends Payload
     {
         return [
             'label' => 'HTML',
-            'value' => $this->value->convert(),
+            'value' => $this->getValue(),
         ];
+    }
+
+    /**
+     * @return string
+     */
+    private function getValue() : string
+    {
+        $cloner = new VarCloner;
+        $dumper = new HtmlDumper;
+        $cloned = $cloner->cloneVar($this->value);
+
+        $html = $dumper->dump($cloned, true);
+
+        // remove the <script> and <style> tags because both are already provided
+        // in the Client and also to reduce the size of the payload sent.
+        $dom = new DOMDocument;
+        @$dom->loadHTML($html);
+
+        $xpath = new DOMXPath($dom);
+        $element = $xpath->query("//pre[starts-with(@id, 'sf-dump-')]");
+
+        if ($element->length > 0) {
+            return $dom->saveHTML($element->item(0));
+        }
+
+        return $html;
     }
 }
