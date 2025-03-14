@@ -70,22 +70,12 @@ class Debugify
      * @param  string $color
      * @return $this
      */
-    public function color(#[ExpectedValues(['green', 'blue', 'yellow', 'red'])] string $color) : Debugify
+    public function color(#[ExpectedValues(['green', 'blue', 'yellow', 'red', 'purple'])] string $color) : Debugify
     {
-        $colors = [
-            'green'  => 's',
-            'blue'   => 'i',
-            'yellow' => 'w',
-            'red'    => 'd',
-        ];
-
         $color = strtolower($color);
-        if (! isset($colors[$color])) {
-            return $this;
-        }
 
         return $this->request(new ColorPayload(
-            $colors[$color],
+            $color,
         ));
     }
 
